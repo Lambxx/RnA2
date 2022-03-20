@@ -1,0 +1,214 @@
+
+  ( define (domain mailBot-world)
+    (:requirements :adl)
+
+    (:types cell bot scanner package belt switch)
+
+    (:predicates
+      (Connected ?x - cell ?y - cell)
+      (BeltOn ?x - belt)
+      (Scanned ?x - package)
+      (HoldingObj ?x - bot ?y - object)
+      (Holding ?x - bot)
+      (On ?x - object ?y - cell)
+      (Movable ?x - object)
+      (Scanner ?x - object)
+      (Package ?x - package)
+      (Delivered ?x - package)
+      (beltCell ?x - cell)
+      )
+
+
+
+    (:action Move
+        :parameters (?mailBot - bot ?x - cell ?y - cell)
+        :precondition (and
+          (On ?mailBot ?x)
+          (Connected ?x ?y)
+          )
+        :effect (and
+          (On ?mailBot ?y)
+          (not (On ?mailBot ?x)) )
+    )
+
+    (:action Pickup
+      :parameters (?mailBot - bot ?x - object ?y - cell)
+      :precondition (and
+        (On ?mailBot ?cell)
+        (On ?x ?cell)
+        (not (Holding ?bot))
+        (Movable ?x)
+        )
+      :effect (and
+      (HoldingObj ?mailBot ?x)
+      (Holding ?mailBot)
+      (not (On ?x ?cell))
+      (not (Occupied ?cell))
+      )
+      )
+
+
+  (:action Scan
+    :parameters (?bot - bot ?object - package ?cell - cell ?scanner - scanner)
+    :precondition (and
+      (On ?bot ?cell)
+      (On ?object ?cell)
+      (HoldingObj ?bot ?scanner)
+      (not (Scanned ?object))
+  )
+  :effect (scanned(object))
+  )
+
+  (:action turnOn
+  :parameters (?bot - bot ?cell - cell ?switch - switch ?belt - belt)
+  :precondition (and
+  (On ?bot ?cell)
+  (On ?switch ?cell)
+  )
+  :effect BeltOn(belt)
+  )
+
+  (:action PutDown
+  :parameters (?mailBot - bot ?x - object ?y - cell)
+  :precondition (and
+    (On ?mailBot ?cell)
+    (HoldingObj ?bot ?x)
+    )
+  :effect (and
+    (not(HoldingObj ?mailBot ?x))
+    (not(Holding ?mailBot))
+    (On ?x ?cell)
+    )
+    )
+    (:action Deliver
+      :parameters(?package - package ?cell - cell ?belt - belt)
+      :precondition(and
+        (BeltOn ?belt)
+        (On ?package ?cell)
+        (beltCell ?cell) )
+      :effect and(
+          (Delivered ?package)
+          ))
+
+        )
+      )
+
+    )
+
+  (define (problem pddl-problem1)
+         (:domain mailBot-World)
+         (:objects
+           c51 - cell
+           c52 - cell
+           c53 - cell
+           c54 - cell
+           c55 - cell
+           c41 - cell
+           c42 - cell
+           c43 - cell
+           c44 - cell
+           c45 - cell
+           c31 - cell
+           c32 - cell
+           c33 - cell
+           c34 - cell
+           c35 - cell
+           c21 - cell
+           c22 - cell
+           c23 - cell
+           c24 - cell
+           c25 - cell
+           c11 - cell
+           c12 - cell
+           c13 - cell
+           c14 - cell
+           c15 - cell
+           scanner - scanner
+           p001 - package
+           p010 - package
+           p011 - packages
+           belt - belt
+           switch - switch
+           bot - bot
+
+           )
+           (:init
+             (Connected c11 c12)
+             (Connected c11 c21)
+
+             (Connected c12 c13)
+             (Connected c12 c22)
+
+             (Connected c13 c23)
+             (Connected c13 c14)
+
+             (Connected c14 c15)
+             (Connected c24 c14)
+
+             (Connected c15 c25)
+
+             (Connected c25 c24)
+             (Connected c25 c35)
+
+             (Connected c24 c34)
+             (Connected c23 c24)
+
+             (Connected c23 c33)
+             (Connected c23 c22)
+
+             (Connected c22 c32)
+             (Connected c21 c22)
+
+             (Connected c21 c31)
+
+             (Connected c31 c32)
+             (Connected c32 c33)
+
+             (Connected c33 c43)
+             (Connected c33 c34)
+
+             (Connected c34 c35)
+             (Connected c34 c44)
+
+             (Connected c35 c45)
+
+             (Connected c45 c55)
+             (Connected c45 c44)
+
+             (Connected c44 c54)
+             (Connected c44 c43)
+
+             (Connected c43 c53)
+             (Connected c43 c42)
+
+             (Connected c42 c52)
+             (Connected c42 c41)
+
+             (Connected c41 c51)
+
+             (Connected c51 c52)
+
+
+             (Connected c53 c54)
+
+             (Connected c54 c55)
+
+             (On p001 c11)
+             (On p010 c13)
+             (On p011 c15)
+             (On bot c33)
+             (On scanner c51)
+             (On switch c35)
+             (beltCell c34)
+             (beltCell c35)
+             (beltCell c44)
+             (beltCell c45)
+             (beltCell c54)
+             (beltCell c55)
+             (BeltOn belt)
+             )
+             (:goal (
+               (Delivered p001)
+               ))
+
+        )

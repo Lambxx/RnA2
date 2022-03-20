@@ -1,0 +1,157 @@
+\documentclass[answers]{exam}
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+%% Sets page size and margins
+\usepackage[a4paper,margin=2cm]{geometry}
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{framed}
+
+%% Heading, do not modify
+\title{Informatics 2D Coursework 2 Report}
+\author{}
+\date{}
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+\begin{questions}
+\pointname{ marks}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[5]{Task 1.1: Describing The World State}
+\begin{framed}
+%
+
+\emph{Warehouse, i.e. layout of the warehouse and which cells are connected.
+objects --
+
+Warehouse cells:
+c51,c52,c53,c54,c55
+c41,c42,c43,c44,c45
+c31,c32,c33,c34,c35
+c21,c22,c23,c24,c25
+c11,c12,c13,c14,c15
+CHANGE THIS CELLS ONLY CONNECTED IF ADJACENT
+NON DIAGANOL CELLS NOT CONNECTED
+i will list all  unconnected cells all other cells are connected
+no cx1 cell is connected to a cx5 cell where x is any value 1-5
+no c5x cell is connected to a c1x cell
+cell c31 and c41 not connexted
+cell c32 and cel c44 not connected
+cell c53 and cell c53 not connected
+
+matilbot: bot
+portable Scanner: portableScanner
+packages : 001, 010, 011
+deliveryBelt: belt
+Switch: switch
+
+predicates:
+
+Connected (x,y) -- retuns true if cells x and y connected
+BeltOn(x) -- true iff  delivery belt is turned on.
+Scanned(x) --  true iff x scanned
+HoldingObj(bot,x) -- true iff bot holding an object x
+Holding(bot) -- ture iff bot holding a non specified object
+On(x,y) -- ture iff object x is on cell y
+Occupied(x) -- true iff something on cell x
+Bot(x) -- true iff x is a Bot
+Cell(x) -- true iff x is a cell
+Movable(x) -- true iff x is a pickupable object eg scanner
+Package(x) -- true iff x is a package
+Scanner(x) -- true iff x is a scanner
+Switch(x) -- true iff x is a Switch
+Belt(x) -- true iff x is a belt
+}
+\end{framed}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[5]{Task 1.2: Actions}
+\begin{framed}
+% write your answer here
+\emph{
+
+Action(Move(block, from, to)):
+PRECOND : On(b,from) ∧(block) ∧ not Occupied(to)∧
+Block(block) ∧Block(to)∧
+(block ̸= from) ∧ (block ̸= to) ∧ (from ̸= to)
+EFFECT : On(block, to) ∧On(block, from)∧
+not Occupied (from) ∧ ̸= not Occupied(to)
+
+MailBot can move between two tiles if they are connected. MailBot cannot move diagonally
+or through the wall.
+
+Action(Move(bot, from, to)):
+PRECOND : On(bot,from) and not Occupied(to)
+and connected(from, to) and Bot(bot)
+EFFECT : On(bot, to) ∧ not On(bot, from) and
+not Occupied (from) and Occupied(to)
+
+Action(Pickup(bot,object,cell)):
+PRECOND : On(bot,cell) and On(object,cell) and
+not Holding(bot) and Bot(bot) and Movable(object)
+EFFECT : HoldingObj(bot,object) and Holding(bot)
+and not On(object,cell) and not occcupied (cell)
+
+Action( Scan(bot,object,cell,scanner)):
+PRECOND : On(bot,cell) and On(object,cell) and
+ HoldingObj(bot,scanner) and Bot(bot) and Movable(object) and
+Scanner(scanner) and not Scanned(object)
+EFFECT : scanned(object)
+
+Action(turnOn(bot,cell,switch,belt)):
+PRECOND : On(bot,cell) and On(switch,cell) and
+Bot(bot) and Switch(switch) and Belt(belt)
+EFFECT : BeltOn(belt)
+
+ADD PUT DOWN
+
+}
+\end{framed}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[10]{Task 1.3: Backwards state-space search}
+\begin{framed}
+\emph{Your answer here.}
+\end{framed}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[5]{Task 2.1 Test Problem \#1}
+\begin{framed}
+\emph{Your answer here.}
+\end{framed}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[5]{Task 2.2 Test Problem \#2}
+\begin{framed}
+\emph{Your answer here.}
+\end{framed}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[5]{Task 3.1 Design }
+\begin{framed}
+\emph{Your answer here.}
+\end{framed}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[10]{Task 3.2 Evaluation }
+\begin{framed}
+\emph{Your answer here.}
+\end{framed}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[15]{Task 4.1 Energy Station}
+\begin{framed}
+\emph{Your answer here.}
+\end{framed}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[15]{Task 4.2 Limited Power}
+\begin{framed}
+\emph{Your answer here.}
+\end{framed}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[25]{Task 4.3 Your Extension}
+\begin{framed}
+\emph{Your answer here.}
+\end{framed}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{questions}
+
+
+\end{document}
