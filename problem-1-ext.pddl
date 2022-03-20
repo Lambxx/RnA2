@@ -30,41 +30,36 @@
          p001 - package
          p010 - package
          p011 - package
-         p002 - package; ADDED
-         p020 - package; ADDED
-         p022 - package; Added packages
-         p003 - package; ADDED
-         p030 - package; ADDED
-         p033 - package; Added packages
          belt - belt
          switch - switch
          bot - bot
 
          )
          (:init
+           (= (battery-amount) 10)
            (Connected c11 c12)
-           ;(Connected c11 c21)
+           (Connected c11 c21)
 
-           (Connected c12 c11)
-           ;(Connected c21 c11)
+           (Connected c12 c12)
+           (Connected c21 c11)
 
            (Connected c12 c13)
-           ;(Connected c12 c22)
+           (Connected c12 c22)
 
            (Connected c13 c12)
-           ;(Connected c22 c12)
+           (Connected c22 c12)
 
-           ;(Connected c13 c23)
+           (Connected c13 c23)
            (Connected c13 c14)
 
-           ;(Connected c23 c13)
+           (Connected c23 c13)
            (Connected c14 c13)
 
            (Connected c14 c15)
-           ;(Connected c24 c14)
+           (Connected c24 c14)
 
            (Connected c15 c14)
-           ;(Connected c14 c24)
+           (Connected c14 c24)
 
            (Connected c15 c25)
            (Connected c25 c15)
@@ -165,32 +160,19 @@
            (On p001 c11)
            (On p010 c13)
            (On p011 c15)
-           (On p002 c22)
-           (On p020 c23)
-           (On p022 c25)
-           (On p003 c33)
-           (On p030 c33)
-           (On p033 c35)
-           (On bot c11)
+           (On bot c33)
            (On scanner c51)
-           (On switch c11) ;moved switch
-           (beltCell c11) ;Just one bellt cell
-
+           (On switch c35)
+           (On bot c33)
+           (beltCell c34)
+           (beltCell c35)
+           (beltCell c44)
+           (beltCell c45)
+           (beltCell c54)
+           (beltCell c55)
+           (BeltOn belt)
            )
            (:goal (and
              (Delivered p001)
-             (Delivered p011)
-             (Delivered p010)
-             ;(Delivered p002) THESE ADDITIONS APPEAR TOO HARD
-            ; (Delivered p022)
-             (Delivered p020)
-             (Delivered p003)
-             (Delivered p033)
-            ; (Delivered p030)
-             (On bot c33) ; Bot finishes here
-             ;(On scanner c51) ;return Scanner
-             (not (BeltOn belt)) ; turn belt off after
-
+             )
              ))
-
-      )

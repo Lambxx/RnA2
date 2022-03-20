@@ -1,0 +1,162 @@
+( define (domain mailBot-world)
+  (:requirements :adl :fluents)
+
+  (:types cell bot scanner package belt switch)
+
+  (:predicates
+    (Connected ?x - cell ?y - cell)
+    (BeltOn ?x - belt)
+    (Scanned ?x - package)
+    (HoldingObj ?x - bot ?y - object)
+    (On ?x - object ?y - cell)
+    (Scanner ?x - object)
+    (Package ?x - package)
+    (Delivered ?x - package)
+    (beltCell ?x - cell)
+    (Holding ?bot - bot)
+    (rechargeCell ?x -cell)
+    )
+
+    (:functions
+      (battery-amount ?mailbot - bot)
+      (battery-capacity)
+      )
+
+
+
+  (:action Move
+      :parameters (?mailBot - bot ?x - cell ?y - cell)
+      :precondition (and
+        (On ?mailBot ?x)
+        (Connected ?x ?y)
+        (not (Holding ?mailBot))
+        )
+      :effect (and
+        (On ?mailBot ?y)
+        (not (On ?mailBot ?x))
+        (decrease (battery-amount ?mailBot) 1)
+  )
+)
+  (:action MoveHolding
+      :parameters (?mailBot - bot ?x - cell ?y - cell)
+      :precondition (and
+        (On ?mailBot ?x)
+        (Connected ?x ?y)
+        (Holding ?mailBot)
+        )
+      :effect (and
+        (On ?mailBot ?y)
+        (not (On ?mailBot ?x))
+        (decrease (battery-amount ?mailBot) 2)
+        )
+  )
+
+  (:action Recharge
+    :parameters(?mailBot - bot ?x - cell)
+    :precondition(and
+      (On ?mailBot ?x)
+      (rechargeCell ?x)
+      )
+      :effect (and
+        (= (battery-amount ?mailBot) 15)
+        )
+        )
+
+
+
+  (:action PickupPackage
+    :parameters (?mailBot - bot ?x - package ?y - cell)
+    :precondition (and
+      (On ?mailBot ?y)
+      (On ?x ?y)
+      (not( Holding ?mailBot))
+      )
+    :effect (and
+    (HoldingObj ?mailBot ?x)
+    (not (On ?x ?y))
+    (Holding ?mailBot)
+  )
+    )
+    (:action PickupScanner
+      :parameters (?mailBot - bot ?x - scanner ?y - cell)
+      :precondition (and
+        (On ?mailBot ?y)
+        (On ?x ?y)
+        (not (Holding ?mailBot))
+        )
+      :effect (and
+      (HoldingObj ?mailBot ?x)
+      (not (On ?x ?y))
+      (Holding ?mailBot)
+    )
+      )
+
+
+(:action Scan
+  :parameters (?bot - bot ?object - package ?cell - cell ?scanner - scanner)
+  :precondition (and
+    (On ?bot ?cell)
+    (On ?object ?cell)
+    (HoldingObj ?bot ?scanner)
+  )
+
+  :effect (Scanned ?object)
+  )
+
+
+(:action turnOn
+:parameters (?bot - bot ?cell - cell ?switch - switch ?belt - belt)
+:precondition (and
+(On ?bot ?cell)
+(On ?switch ?cell)
+)
+:effect (BeltOn ?belt))
+
+(:action turnOff
+:parameters (?bot - bot ?cell - cell ?switch - switch ?belt - belt)
+:precondition (and
+(On ?bot ?cell)
+(On ?switch ?cell)
+)
+:effect (and
+  (not (BeltOn ?belt))
+  )
+  )
+
+
+(:action PutDownPackage
+:parameters (?mailBot - bot ?x - package ?y - cell)
+:precondition (and
+  (On ?mailBot ?y)
+  (HoldingObj ?mailbot ?x)
+  )
+:effect (and
+  (not(HoldingObj ?mailBot ?x))
+  (On ?x ?y)
+  (not (Holding ?mailBot))
+  )
+  )
+
+  (:action PutDownScanner
+  :parameters (?mailBot - bot ?x - scanner ?y - cell)
+  :precondition (and
+    (On ?mailBot ?y)
+    (HoldingObj ?mailbot ?x)
+    )
+  :effect (and
+    (not(HoldingObj ?mailBot ?x))
+    (On ?x ?y)
+    (not (Holding ?mailBot))
+    )
+    )
+  (:action Deliver
+    :parameters(?package - package ?cell - cell ?belt - belt)
+    :precondition(and
+      (BeltOn ?belt)
+      (On ?package ?cell)
+      (beltCell ?cell)
+      (scanned ?package) )
+    :effect (and
+        (Delivered ?package)
+        ))
+        )
